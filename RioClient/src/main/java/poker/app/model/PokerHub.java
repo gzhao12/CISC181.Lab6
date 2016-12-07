@@ -82,55 +82,10 @@ public class PokerHub extends Hub {
 
 
 			case Draw:
-
-				HubGamePlay
-						.seteDrawCountLast(eDrawCount.geteDrawCount(HubGamePlay.geteDrawCountLast().getDrawNo() + 1));
-				HubGamePlay.seteGameState(eGameState.DRAW);
-				CardDraw cd = HubGamePlay.getRule().GetDrawCard(HubGamePlay.geteDrawCountLast());
-				int iCardsToDraw = cd.getCardCount().getCardCount();
-
-				if (cd.getCardDestination() == eCardDestination.Player) {
-					for (int i : HubGamePlay.getiActOrder()) {
-						Player p = HubGamePlay.getPlayerByPosition(i);
-						if (p != null) {
-							for (int iDraw = 0; iDraw < iCardsToDraw; iDraw++) {
-								try {
-									HubGamePlay.drawCard(p, cd.getCardDestination());
-								} catch (DeckException e) {
-									// Whoops! Exception was throw... send it
-									// back to the client
-									resetOutput();
-									sendToAll(e);
-									e.printStackTrace();
-									return;
-								}
-							}
-						}
-					}
-				} else if (cd.getCardDestination() == eCardDestination.Community) {
-					System.out.println("Community");
-					Player p = HubGamePlay.getPlayerCommon();
-					if (p != null) {
-						for (int iDraw = 0; iDraw < iCardsToDraw; iDraw++) {
-							try {
-								HubGamePlay.drawCard(p, cd.getCardDestination());
-							} catch (DeckException e) {
-								// Whoops! Exception was throw... send it
-								// back to the client
-								resetOutput();
-								sendToAll(e);
-								e.printStackTrace();
-								return;
-							}
-						}
-					}
-				}
-
-				HubGamePlay.isGameOver();
-				
 				resetOutput();
 				sendToAll(HubGamePlay);
 				break;
+				
 			case ScoreGame:
 				// Am I at the end of the game?
 				try {
